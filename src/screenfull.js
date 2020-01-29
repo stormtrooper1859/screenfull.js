@@ -105,7 +105,11 @@
 
 				this.on('change', onFullScreenExit);
 
-				Promise.resolve(document[fn.exitFullscreen]()).catch(reject);
+				var returnPromise = document[fn.exitFullscreen]();
+
+				if (returnPromise instanceof Promise) {
+					Promise.resolve(returnPromise).then(onFullScreenExit).catch(reject);
+				}
 			}.bind(this));
 		},
 		toggle: function (element) {
