@@ -1,6 +1,6 @@
 /*!
 * screenfull
-* v5.0.1 - 2020-01-19
+* v5.0.1 - 2020-01-29
 * (c) Sindre Sorhus; MIT License
 */
 (function () {
@@ -110,7 +110,11 @@
 
 				this.on('change', onFullScreenExit);
 
-				Promise.resolve(document[fn.exitFullscreen]()).catch(reject);
+				var returnPromise = document[fn.exitFullscreen]();
+
+				if (returnPromise instanceof Promise) {
+					Promise.resolve(returnPromise).then(onFullScreenExit).catch(reject);
+				}
 			}.bind(this));
 		},
 		toggle: function (element) {
